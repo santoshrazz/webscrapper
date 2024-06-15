@@ -14,12 +14,6 @@ const HeroSection = () => {
               world use Flowbite to simplify their payment stack.
             </p>
             <InputComponent />
-            <a
-              href="#"
-              className="inline-flex items-center bg-blue-900 hover:bg-blue-700 text-white justify-center px-5 py-3 text-base font-medium text-center  border border-gray-300 rounded-lg  focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-            >
-              Search
-            </a>
           </div>
           <div className="lg:mt-0 lg:col-span-5 lg:flex">
             <img
