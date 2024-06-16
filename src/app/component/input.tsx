@@ -1,6 +1,6 @@
 "use client";
 import React, { FormEvent, ReactEventHandler, useState } from "react";
-import { scrapProduct } from "../lib";
+import { scrapAndStoreAmazonProduct } from "../lib";
 
 export const InputComponent = () => {
   const [searchParams, setSearchParams] = useState("");
@@ -10,7 +10,7 @@ export const InputComponent = () => {
     try {
       setloading(true);
       console.log("called");
-      const response = await scrapProduct(searchParams);
+      const response = await scrapAndStoreAmazonProduct(searchParams);
     } catch (error: any) {
       console.log(`An error occured while while fetching data `, error.message);
     } finally {

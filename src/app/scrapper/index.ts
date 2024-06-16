@@ -1,7 +1,8 @@
 "use server";
 import axios from "axios";
 import * as cheerio from "cheerio";
-export async function scrapAndStoreAmazonProduct(productUrl: string) {
+import { removeNonDigits } from "../lib/utils";
+export async function scrapProduct(productUrl: string) {
   if (!productUrl) return;
 
   // BrightData proxy configuration
@@ -23,8 +24,40 @@ export async function scrapAndStoreAmazonProduct(productUrl: string) {
     const response = await axios.get(productUrl, options);
     const data = response.data;
     const $ = cheerio.load(data);
-    const pricetag = $(".a-price-whole");
+    const productPrice = $(".a-price-whole").text().trim().split(".")[0];
     const title = $("#productTitle").text().trim();
+    const noOfRatings = removeNonDigits($("#acrCustomerReviewText").text());
+    const actualNoOfRatings = noOfRatings.slice(0, noOfRatings.length / 2);
+    const currency = $(".a-price-symbol").text().trim().slice(0, 1);
+    const noOfStars = $(".a-size-base .a-color-base")
+      .text()
+      .trim()
+      .split(" ")[0];
+    const isInStock = $(".a-color-success").text().trim().includes("In stock");
+    const productImage = $("#landingImage").attr("data-a-dynamic-image");
+    const productImageUrls = Object.keys(JSON.parse(productImage || "") || "");
+    console.log({
+      productPrice,
+      title,
+      actualNoOfRatings,
+      productImageUrls,
+      currency,
+      noOfStars,
+      isInStock,
+    });
+    const dataToStore = {
+      url: productUrl,
+      currency: currency || "₹",
+      image: productImageUrls[0],
+      title,
+      productPrice,
+      priceHistory: [],
+      category: "category",
+      instock: isInStock || "false",
+      noOfRatings: noOfRatings || "0",
+      noOfStars: noOfStars || "0",
+    };
+    return dataToStore;
   } catch (error: any) {
     console.log(`Error while fetching product`, error.message);
   }
