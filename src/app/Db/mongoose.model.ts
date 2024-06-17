@@ -1,46 +1,75 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
-const productSchema = new mongoose.Schema({
-  url: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  currency: {
-    type: String,
-    require: true,
-  },
-  productImage: {
-    type: String,
-    require: true,
-  },
-  productPrice: {
-    type: String,
-    require: true,
-  },
-  priceHistory: [
-    {
-      price: {
-        type: String,
-        require: true,
-      },
-      priceDate: {
-        type: Date,
-        default: Date.now,
-      },
-    },
-  ],
-  category: {
-    type: String,
-  },
-  reviewCount: {
-    type: Number,
-  },
-  stars: {
-    type: Number,
-  },
-});
+// console.log(mongoose.models.products);
+// const productSchema = new mongoose.Schema(
+//   {
+//     url: {
+//       type: String,
+//       required: true,
+//       unique: true,
+//     },
+//     title: {
+//       type: String,
+//       required: true,
+//     },
+//     currency: {
+//       type: String,
+//       required: true,
+//     },
+//     productImage: {
+//       type: String,
+//       required: true,
+//     },
+//     productPrice: {
+//       type: String,
+//       required: true,
+//     },
+//     instock: {
+//       type: Boolean,
+//       required: true,
+//       default: false,
+//     },
+//     priceHistory: [
+//       {
+//         price: {
+//           type: String,
+//           required: true,
+//         },
+//         priceDate: {
+//           type: Date,
+//           default: Date.now,
+//         },
+//       },
+//     ],
+//     lowestPrice: {
+//       type: String,
+//     },
+//     highestPrice: {
+//       type: String,
+//     },
+//     category: {
+//       type: String,
+//     },
+//     reviewCount: {
+//       type: String,
+//     },
+//     stars: {
+//       type: String,
+//     },
+//     users: [
+//       {
+//         email: {
+//           type: String,
+//           required: true,
+//         },
+//         default: [],
+//       },
+//     ],
+//   },
+//   { timestamps: true }
+// );
 
-const ProductModel =
-  mongoose.models.PRODUCTS || mongoose.model("PRODUCTS", productSchema);
-export default ProductModel;
+// export const ProductModel =
+//   mongoose.models.products || mongoose.model("products", productSchema);
+
+// export default ProductModel;

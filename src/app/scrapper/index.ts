@@ -2,6 +2,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { removeNonDigits } from "../lib/utils";
+import { STOREDATA } from "../../../types";
 export async function scrapProduct(productUrl: string) {
   if (!productUrl) return;
 
@@ -36,27 +37,30 @@ export async function scrapProduct(productUrl: string) {
     const isInStock = $(".a-color-success").text().trim().includes("In stock");
     const productImage = $("#landingImage").attr("data-a-dynamic-image");
     const productImageUrls = Object.keys(JSON.parse(productImage || "") || "");
-    console.log({
-      productPrice,
-      title,
-      actualNoOfRatings,
-      productImageUrls,
-      currency,
-      noOfStars,
-      isInStock,
-    });
-    const dataToStore = {
+    // console.log({
+    //   productPrice,
+    //   title,
+    //   actualNoOfRatings,
+    //   productImageUrls,
+    //   currency,
+    //   noOfStars,
+    //   isInStock,
+    // });
+    const dataToStore: STOREDATA = {
       url: productUrl,
       currency: currency || "₹",
-      image: productImageUrls[0],
+      productImage: productImageUrls[0],
       title,
       productPrice,
       priceHistory: [],
       category: "category",
-      instock: isInStock || "false",
-      noOfRatings: noOfRatings || "0",
-      noOfStars: noOfStars || "0",
+      instock: isInStock || false,
+      reviewCount: noOfRatings || "0",
+      stars: noOfStars || "0",
+      lowestPrice: productPrice,
+      highestPrice: productPrice,
     };
+    console.log("Before Returning data");
     return dataToStore;
   } catch (error: any) {
     console.log(`Error while fetching product`, error.message);
