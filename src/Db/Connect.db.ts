@@ -2,12 +2,15 @@ import mongoose from "mongoose";
 
 export async function connectToDb() {
   try {
-    const MONGODB_URI = process.env.MONGODB_URI;
+    const MONGODB_URI = `mongodb://127.0.0.1:27017/webScrapper`;
     if (!MONGODB_URI) {
-      console.log(`No mongodb connection url found`);
+      return console.log(`No mongodb connection url found`);
     }
-    const connectionInstance = await mongoose.connect(MONGODB_URI!);
-    console.log(`Connected db successfully`);
+    const connectionInstance = await mongoose.connect(MONGODB_URI);
+    console.log(
+      `Connected db successfully`,
+      connectionInstance.connection.host
+    );
     mongoose.connection.on("error", () => {
       console.log(`DB connection error`);
       process.exit(1);

@@ -9,7 +9,6 @@ export const InputComponent = () => {
     event.preventDefault();
     try {
       setloading(true);
-      console.log("called");
       const response = await scrapAndStoreAmazonProduct(searchParams);
     } catch (error: any) {
       console.log(`An error occured while while fetching data `, error.message);

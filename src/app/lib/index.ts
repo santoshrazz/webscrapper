@@ -1,13 +1,11 @@
+"use server";
+import { connectToDb } from "@/Db/Connect.db";
 import { STOREDATA } from "../../../types";
 import { scrapProduct } from "../scrapper";
-import { connectToDb } from "./connectDb";
+import ProductModel from "@/models/data.model";
 import { getLowestPrice, highestPrice } from "./utils";
-// import ProductModel from "../Db/mongoose.model";
-import { ProductModel } from "../Db/mongoose2.model";
-
-connectToDb();
 export async function scrapAndStoreAmazonProduct(searchUrl: string) {
-  console.log(`Called scrapandStore funtion`);
+  connectToDb();
   if (!searchUrl) return;
   const mainUrl = new URL(searchUrl);
   if (
@@ -19,10 +17,10 @@ export async function scrapAndStoreAmazonProduct(searchUrl: string) {
       console.log(scrapedProduct);
       if (!scrapedProduct) return;
       let product: STOREDATA = scrapedProduct;
-      console.log(`Before existing product`);
       const existingProduct = await ProductModel.findOne({
         url: scrapedProduct?.url,
       });
+      console.log(existingProduct);
       console.log(`After existing product`);
       if (existingProduct) {
         const newPrice = {
@@ -38,7 +36,7 @@ export async function scrapAndStoreAmazonProduct(searchUrl: string) {
         );
         const updatedExistingProduct = await existingProduct.save();
         console.log(`UpdatedExisting Product is `, updatedExistingProduct);
-
+        return;
         // const updatedPriceHistory = [
         //   ...existingProduct.priceHistory,
         //   { price: scrapedProduct?.productPrice },
@@ -50,7 +48,20 @@ export async function scrapAndStoreAmazonProduct(searchUrl: string) {
         //   highestPrice: String(highestPrice(updatedPriceHistory)),
         // };
       }
-      const newProduct = await ProductModel.create(scrapProduct);
+      const newProduct = await ProductModel.create({
+        url: product.url,
+        title: product.title,
+        currency: product.currency,
+        productImage: product.productImage,
+        productPrice: product.productPrice,
+        instock: product.instock,
+        priceHistory: product.priceHistory,
+        lowestPrice: product.lowestPrice,
+        highestPrice: product.highestPrice,
+        category: product.category,
+        reviewCount: product.reviewCount,
+        stars: product.stars,
+      });
       console.log(newProduct);
     } catch (error: any) {
       console.log(`An error occured while while fetching data `, error);
