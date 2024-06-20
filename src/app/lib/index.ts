@@ -3,8 +3,10 @@ import { connectToDb } from "@/Db/Connect.db";
 import { STOREDATA } from "../../../types";
 import { scrapProduct } from "../scrapper";
 import ProductModel from "@/models/data.model";
-import { getLowestPrice, highestPrice } from "./utils";
+import { findHighestPrice, findLowestPrice } from "./utils";
+import { useRouter } from "next/router";
 export async function scrapAndStoreAmazonProduct(searchUrl: string) {
+  const router = useRouter();
   connectToDb();
   if (!searchUrl) return;
   const mainUrl = new URL(searchUrl);
@@ -14,7 +16,6 @@ export async function scrapAndStoreAmazonProduct(searchUrl: string) {
   ) {
     try {
       const scrapedProduct = await scrapProduct(searchUrl);
-      console.log(scrapedProduct);
       if (!scrapedProduct) return;
       let product: STOREDATA = scrapedProduct;
       const existingProduct = await ProductModel.findOne({
@@ -29,24 +30,14 @@ export async function scrapAndStoreAmazonProduct(searchUrl: string) {
         };
         existingProduct.priceHistory.push(newPrice);
         existingProduct.lowestPrice = String(
-          getLowestPrice(existingProduct.priceHistory)
+          findLowestPrice(existingProduct.priceHistory)
         );
         existingProduct.highestPrice = String(
-          highestPrice(existingProduct.priceHistory)
+          findHighestPrice(existingProduct.priceHistory)
         );
         const updatedExistingProduct = await existingProduct.save();
         console.log(`UpdatedExisting Product is `, updatedExistingProduct);
         return;
-        // const updatedPriceHistory = [
-        //   ...existingProduct.priceHistory,
-        //   { price: scrapedProduct?.productPrice },
-        // ];
-        // product = {
-        //   ...scrapedProduct,
-        //   priceHistory: updatedPriceHistory,
-        //   lowestPrice: String(getLowestPrice(updatedPriceHistory)),
-        //   highestPrice: String(highestPrice(updatedPriceHistory)),
-        // };
       }
       const newProduct = await ProductModel.create({
         url: product.url,
@@ -63,6 +54,10 @@ export async function scrapAndStoreAmazonProduct(searchUrl: string) {
         stars: product.stars,
       });
       console.log(newProduct);
+      router.push({
+        pathname: "/productpage",
+        query: newProduct,
+      });
     } catch (error: any) {
       console.log(`An error occured while while fetching data `, error);
     }
