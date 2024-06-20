@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/component/navbar";
-
-const inter = Inter({ subsets: ["latin"] });
+import TrendingProducts from "./component/TrendingProducts";
 
 export const metadata: Metadata = {
   title: "Price Sky",
@@ -17,9 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         {<Navbar />}
         {children}
+        {<TrendingProducts />}
       </body>
     </html>
   );

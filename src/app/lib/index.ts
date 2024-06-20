@@ -4,9 +4,7 @@ import { STOREDATA } from "../../../types";
 import { scrapProduct } from "../scrapper";
 import ProductModel from "@/models/data.model";
 import { findHighestPrice, findLowestPrice } from "./utils";
-import { useRouter } from "next/router";
 export async function scrapAndStoreAmazonProduct(searchUrl: string) {
-  const router = useRouter();
   connectToDb();
   if (!searchUrl) return;
   const mainUrl = new URL(searchUrl);
@@ -54,12 +52,25 @@ export async function scrapAndStoreAmazonProduct(searchUrl: string) {
         stars: product.stars,
       });
       console.log(newProduct);
-      router.push({
-        pathname: "/productpage",
-        query: newProduct,
-      });
     } catch (error: any) {
-      console.log(`An error occured while while fetching data `, error);
+      console.log(
+        `An error occur
+        ed while while fetching data `,
+        error
+      );
     }
+  }
+}
+export async function getAllProduct() {
+  connectToDb();
+  try {
+    const product = await ProductModel.find({});
+    return product;
+  } catch (error) {
+    console.log(
+      `An error occur
+      ed while while fetching data `,
+      error
+    );
   }
 }
