@@ -15,4 +15,5 @@ export interface STOREDATA {
   stars: string;
   lowestPrice: string;
   highestPrice: string;
+  _id: string | undefined;
 }

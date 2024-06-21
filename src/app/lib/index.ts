@@ -74,3 +74,25 @@ export async function getAllProduct() {
     );
   }
 }
+
+export async function getSingleProduct(productId: string) {
+  connectToDb();
+  try {
+    const singleProduct = await ProductModel.findById(productId);
+    console.log("Single product is", singleProduct);
+
+    if (!singleProduct) {
+      return {
+        message: "Error finding single product",
+      };
+    }
+
+    return singleProduct;
+  } catch (error: any) {
+    console.error("Error while fetching single product", error.message);
+    return {
+      message: "Error while fetching single product",
+      error: error.message,
+    };
+  }
+}
