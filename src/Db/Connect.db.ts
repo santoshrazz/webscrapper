@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export async function connectToDb() {
   try {
-    const MONGODB_URI = `mongodb://127.0.0.1:27017/webScrapper`;
+    const MONGODB_URI = process.env.MONGODB_URI;
     if (!MONGODB_URI) {
       return console.log(`No mongodb connection url found`);
     }

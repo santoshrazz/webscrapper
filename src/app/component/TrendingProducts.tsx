@@ -6,7 +6,7 @@ import Link from "next/link";
 const TrendingProducts = async () => {
   const allProducts = await getAllProduct();
   return (
-    <div className=" bg-slate-500 min-h-screen m-0">
+    <div className=" bg-slate-300 min-h-screen m-0">
       <h2 className="text-center lg:text-5xl md:text-3xl text-2xl font-bold text-white">
         Trending Products
       </h2>

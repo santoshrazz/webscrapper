@@ -8,7 +8,6 @@ const page = async ({ params }: { params: { productId: string } }) => {
   let singleProduct;
   try {
     singleProduct = await getSingleProduct(params.productId);
-    console.log(singleProduct);
   } catch (error) {
     console.log(error);
   }

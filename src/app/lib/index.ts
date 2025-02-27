@@ -15,12 +15,10 @@ export async function scrapAndStoreAmazonProduct(searchUrl: string) {
     try {
       const scrapedProduct = await scrapProduct(searchUrl);
       if (!scrapedProduct) return;
-      let product: STOREDATA = scrapedProduct;
+      let product = scrapedProduct;
       const existingProduct = await ProductModel.findOne({
         url: scrapedProduct?.url,
       });
-      console.log(existingProduct);
-      console.log(`After existing product`);
       if (existingProduct) {
         const newPrice = {
           price: scrapedProduct.productPrice,
@@ -33,9 +31,8 @@ export async function scrapAndStoreAmazonProduct(searchUrl: string) {
         existingProduct.highestPrice = String(
           findHighestPrice(existingProduct.priceHistory)
         );
-        const updatedExistingProduct = await existingProduct.save();
-        console.log(`UpdatedExisting Product is `, updatedExistingProduct);
-        return;
+        const updatedExistingProduct = await existingProduct.save().lean();
+        return updatedExistingProduct;
       }
       const newProduct = await ProductModel.create({
         url: product.url,
@@ -51,7 +48,7 @@ export async function scrapAndStoreAmazonProduct(searchUrl: string) {
         reviewCount: product.reviewCount,
         stars: product.stars,
       });
-      console.log(newProduct);
+      return newProduct.toObject();
     } catch (error: any) {
       console.log(
         `An error occur
@@ -79,7 +76,6 @@ export async function getSingleProduct(productId: string) {
   connectToDb();
   try {
     const singleProduct = await ProductModel.findById(productId);
-    console.log("Single product is", singleProduct);
 
     if (!singleProduct) {
       return {

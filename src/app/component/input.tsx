@@ -1,15 +1,18 @@
 "use client";
 import React, { FormEvent, useState } from "react";
 import { scrapAndStoreAmazonProduct } from "../lib";
+import { useRouter } from "next/navigation";
 
 export const InputComponent = () => {
   const [searchParams, setSearchParams] = useState("");
   const [loading, setloading] = useState(false);
+  const nav = useRouter();
   const handleOnSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
       setloading(true);
-      const response = await scrapAndStoreAmazonProduct(searchParams);
+      const response = await scrapAndStoreAmazonProduct(searchParams)
+      nav.push(`/trendingproducts/${response._id}`)
     } catch (error: any) {
       console.log(`An error occured while while fetching data `, error.message);
     } finally {

@@ -37,16 +37,7 @@ export async function scrapProduct(productUrl: string) {
     const isInStock = $(".a-color-success").text().trim().includes("In stock");
     const productImage = $("#landingImage").attr("data-a-dynamic-image");
     const productImageUrls = Object.keys(JSON.parse(productImage || "") || "");
-    // console.log({
-    //   productPrice,
-    //   title,
-    //   actualNoOfRatings,
-    //   productImageUrls,
-    //   currency,
-    //   noOfStars,
-    //   isInStock,
-    // });
-    const dataToStore: STOREDATA = {
+    const dataToStore = {
       url: productUrl,
       currency: currency || "₹",
       productImage: productImageUrls[0],
@@ -60,7 +51,6 @@ export async function scrapProduct(productUrl: string) {
       lowestPrice: productPrice,
       highestPrice: productPrice,
     };
-    console.log("Before Returning data");
     return dataToStore;
   } catch (error: any) {
     console.log(`Error while fetching product`, error.message);

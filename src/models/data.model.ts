@@ -67,7 +67,6 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-console.log(mongoose.models);
 const ProductModel =
   mongoose.models.Product || mongoose.model("Product", productSchema);
 export default ProductModel;
